@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Beautifier and Diff Checker</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .container {
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+        
+        .code-container {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            background-color: #ffffff; /* White background */
+            padding: 20px; /* Add padding for better visual separation */
+        }
+        
+        .code-container > div {
+            margin: 0 10px; /* Add some margin between the two code containers */
+            width: 50%;
+        }
+        
+        textarea {
+            width: 100%;
+            height: 200px;
+        }
+        
+        button {
+            margin-top: 10px;
+            padding: 10px 20px; /* Add padding to the buttons */
+            border: none; /* Remove default border */
+            background-color: #007bff; /* Blue color for button background */
+            color: #ffffff; /* White color for button text */
+            font-size: 16px; /* Font size */
+            cursor: pointer; /* Add cursor pointer on hover */
+            border-radius: 5px; /* Add border radius for rounded corners */
+        }
+        
+        button:hover {
+            background-color: #0056b3; /* Darker blue color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript Beautifier and Diff Checker</h1>
+        
+        <div class="code-container">
+            <div style="background-color: #e0e0e0; padding: 10px;">
+                <h2>Original Code</h2>
+                <textarea id="inputCode1" placeholder="Enter your JavaScript code here"></textarea>
+                <br>
+                <button onclick="beautifyCode('inputCode1')">Beautify</button>
+            </div>
+            <div style="background-color: #d9d9d9; padding: 10px;">
+                <h2>Comparison Code</h2>
+                <textarea id="inputCode2" placeholder="Enter JavaScript code for comparison"></textarea>
+                <br>
+                <button onclick="beautifyCode('inputCode2')">Beautify</button>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <h2>Diff Checker</h2>
+        <button onclick="compareCode('inputCode1', 'inputCode2')">Check Diff</button>
+        
+    </div>
+    
+    <script>
+        function beautifyCode(inputId) {
+            var inputCode = document.getElementById(inputId).value;
+            var beautifiedCode = js_beautify(inputCode);
+            document.getElementById(inputId).value = beautifiedCode;
+        }
+        
+        function compareCode(code1Id, code2Id) {
+            var code1 = document.getElementById(code1Id).value;
+            var code2 = document.getElementById(code2Id).value;
+            var diffResult = JsDiff.diffLines(code1, code2);
+            var diffOutput = '';
+            diffResult.forEach(function(part) {
+                // green for additions, red for deletions
+                // grey for common parts
+                var color = part.added ? 'green' :
+                            part.removed ? 'red' : 'grey';
+                diffOutput += part.value; // We're not adding color here to keep original formatting
+            });
+            alert(diffOutput);
+        }
+    </script>
+    
+    <!-- Include js-beautify and jsdiff libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.13.5/beautify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/diff/3.5.0/diff.min.js"></script>
+</body>
+</html>
+
